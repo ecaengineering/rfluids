@@ -14,6 +14,7 @@ categories = ["api-bindings", "science"]
 
 [features]
 regen-bindings = ["dep:bindgen"]
+static-link = []
 
 [dependencies]
 libloading.workspace = true
@@ -41,3 +42,6 @@ coolprop-sys-windows-aarch64 = { path = "../coolprop-sys-windows-aarch64", versi
 
 [target.'cfg(all(target_os = "windows", target_arch = "x86_64"))'.dependencies]
 coolprop-sys-windows-x86-64 = { path = "../coolprop-sys-windows-x86-64", version = "8.0.0" }
+
+[target.'cfg(all(target_arch = "wasm32", any(target_os = "unknown", target_os = "emscripten")))'.dependencies]
+coolprop-sys-wasm32-unknown-unknown = { path = "../coolprop-sys-wasm32-unknown-unknown", version = "8.0.0" }
