@@ -1,1 +1,0 @@
-pub const COOLPROP_PATH: &str = "/CoolProp.wasm";

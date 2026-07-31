@@ -7,7 +7,7 @@ members = [
     "coolprop-sys-macos-aarch64",
     "coolprop-sys-macos-x86-64",
     "coolprop-sys-windows-aarch64",
-    "coolprop-sys-windows-x86-64", "coolprop-test",
+    "coolprop-sys-windows-x86-64",
     "rfluids",
 ]
 
