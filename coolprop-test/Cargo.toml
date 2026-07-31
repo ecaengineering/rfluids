@@ -1,0 +1,16 @@
+[package]
+name = "coolprop-test"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[features]
+static-link = ["coolprop-sys/static-link"]
+
+[dependencies]
+rfluids = { version = "0.5.0", path = "../rfluids" }
+coolprop-sys = { path = "../coolprop-sys", version = "7.2.3" }

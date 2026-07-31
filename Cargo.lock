@@ -112,6 +112,7 @@ dependencies = [
  "coolprop-sys-linux-x86-64",
  "coolprop-sys-macos-aarch64",
  "coolprop-sys-macos-x86-64",
+ "coolprop-sys-wasm32-unknown-unknown",
  "coolprop-sys-windows-aarch64",
  "coolprop-sys-windows-x86-64",
  "libloading",
@@ -135,12 +136,24 @@ name = "coolprop-sys-macos-x86-64"
 version = "7.2.3"
 
 [[package]]
+name = "coolprop-sys-wasm32-unknown-unknown"
+version = "7.2.3"
+
+[[package]]
 name = "coolprop-sys-windows-aarch64"
 version = "7.2.3"
 
 [[package]]
 name = "coolprop-sys-windows-x86-64"
 version = "7.2.3"
+
+[[package]]
+name = "coolprop-test"
+version = "0.1.0"
+dependencies = [
+ "coolprop-sys",
+ "rfluids",
+]
 
 [[package]]
 name = "crossbeam-deque"
