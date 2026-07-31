@@ -148,14 +148,6 @@ name = "coolprop-sys-windows-x86-64"
 version = "7.2.3"
 
 [[package]]
-name = "coolprop-test"
-version = "0.1.0"
-dependencies = [
- "coolprop-sys",
- "rfluids",
-]
-
-[[package]]
 name = "crossbeam-deque"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
