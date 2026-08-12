@@ -15,7 +15,7 @@
     clippy::pedantic
 )]
 
-#[cfg(all(feature = "static-link", target_arch = "wasm32"))]
+#[cfg(feature = "static-link")]
 include!("bindings_generated_static.rs");
 
 #[cfg(all(not(feature = "static-link"), feature = "regen-bindings"))]
