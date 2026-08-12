@@ -17,16 +17,16 @@ fn main() {
     // every build, and a directory-wide rerun-if-changed picks those up
     // recursively, marking this crate dirty on every subsequent build even
     // when nothing meaningful changed.
-    println!("cargo:rerun-if-changed=../../vendor/CoolProp/CMakeLists.txt");
-    println!("cargo:rerun-if-changed=../../vendor/CoolProp/src");
-    println!("cargo:rerun-if-changed=../../vendor/CoolProp/include");
+    println!("cargo:rerun-if-changed=../vendor/CoolProp/CMakeLists.txt");
+    println!("cargo:rerun-if-changed=../vendor/CoolProp/src");
+    println!("cargo:rerun-if-changed=../vendor/CoolProp/include");
 
     // cmake-rs recognizes the wasm32-unknown-emscripten TARGET and drives
     // the configure through `emcmake` (which sets CMAKE_TOOLCHAIN_FILE to
     // Emscripten's own toolchain file) automatically - no manual
     // CC/CXX/CMAKE_TOOLCHAIN_FILE wiring needed here, same as running
     // `emcmake cmake` by hand would do.
-    let dst = Config::new("../../vendor/CoolProp")
+    let dst = Config::new("../vendor/CoolProp")
         .define("COOLPROP_STATIC_LIBRARY", "ON")
         .define("COOLPROP_EXTERNC_LIBRARY", "ON")
         .cflag("-DCOOLPROP_NO_INCBIN")
