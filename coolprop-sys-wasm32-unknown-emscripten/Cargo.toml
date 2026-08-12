@@ -11,9 +11,24 @@ repository.workspace = true
 license.workspace = true
 keywords = ["CoolProp", "native", "binaries", "WebAssembly", "Wasm"]
 categories = ["api-bindings", "science"]
+# Lets build.rs publish the built artifact's path to direct dependents via
+# DEP_COOLPROP_WASM_ARTIFACT (Cargo's links-metadata mechanism) - only one
+# crate in the whole dependency graph may declare a given `links` value,
+# which is fine here since this is the only crate that actually compiles
+# CoolProp for wasm32-unknown-emscripten. Must be a [package] key, not
+# [lib] - it's silently ignored (never wired up to DEP_* at all) if placed
+# after the [lib] table header instead.
+links = "coolprop"
 
 [lib]
 crate-type = ["rlib"]
+
+[features]
+# Off (default): build+link CoolProp as an Emscripten shared library,
+# dlopen'd at runtime by coolprop-sys's dynamic (libloading) bindings path.
+# On: build+link libCoolProp.a directly into the final module - see
+# heatpump-wasm's Cargo.toml for how this gets toggled end to end.
+static-link = []
 
 [build-dependencies]
 cmake = "0.1"
