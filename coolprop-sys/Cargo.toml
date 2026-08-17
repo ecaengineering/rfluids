@@ -11,6 +11,14 @@ repository.workspace = true
 license.workspace = true
 keywords = ["CoolProp", "ffi", "bindings"]
 categories = ["api-bindings", "science"]
+# Lets build.rs re-publish DEP_COOLPROP_WASM_ARTIFACT (received from its own
+# coolprop-sys-wasm32-unknown-emscripten dependency, which is the one that
+# declares `links = "coolprop"`) as DEP_COOLPROP_SYS_WASM_ARTIFACT, so
+# dependents can read the wasm artifact path from this crate alone instead
+# of also needing a direct path dependency on
+# coolprop-sys-wasm32-unknown-emscripten just to see its `links` metadata
+# (which Cargo only passes to *immediate* dependents).
+links = "coolprop_sys"
 
 [features]
 regen-bindings = ["dep:bindgen"]
