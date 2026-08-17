@@ -1,4 +1,14 @@
 fn main() {
+    // Forward coolprop-sys-wasm32-unknown-emscripten's `links = "coolprop"`
+    // metadata under our own `links = "coolprop_sys"` name, so dependents
+    // building for wasm32-unknown-emscripten in dynamic-link mode can read
+    // DEP_COOLPROP_SYS_WASM_ARTIFACT without depending on that crate
+    // directly. Absent on every other target/mode, since that crate's
+    // build.rs only publishes it there.
+    if let Ok(artifact) = std::env::var("DEP_COOLPROP_WASM_ARTIFACT") {
+        println!("cargo:wasm_artifact={artifact}");
+    }
+
     #[cfg(feature = "regen-bindings")]
     {
         use std::{env, path::PathBuf};
