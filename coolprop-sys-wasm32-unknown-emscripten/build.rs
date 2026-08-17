@@ -7,14 +7,12 @@ fn main() {
         return;
     }
 
-    println!("cargo:rerun-if-env-changed=CARGO_FEATURE_STATIC_LINK");
-
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=../vendor/CoolProp/CMakeLists.txt");
     println!("cargo:rerun-if-changed=../vendor/CoolProp/src");
     println!("cargo:rerun-if-changed=../vendor/CoolProp/include");
 
-    let static_link = env::var_os("CARGO_FEATURE_STATIC_LINK").is_some();
+    let static_link = cfg!(feature = "static-link");
     let out_dir = env::var("OUT_DIR").unwrap();
 
     let mut config = Config::new("../vendor/CoolProp");
