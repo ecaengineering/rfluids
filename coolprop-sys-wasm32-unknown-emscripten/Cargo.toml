@@ -29,6 +29,20 @@ crate-type = ["rlib"]
 # On: build+link libCoolProp.a directly into the final module - see
 # heatpump-wasm's Cargo.toml for how this gets toggled end to end.
 static-link = []
+# Compiles CoolProp's REFPROP backend to call directly into a statically
+# linked librefprop.a (see refprop-sys/lib/static) instead of dlopen()-ing
+# librefprop.so at runtime. Unlike static-link (which is purely about how
+# CoolProp itself gets linked), this changes CoolProp's C++ source: it
+# defines COOLPROP_REFPROP_STATIC_LINK, which REFPROPMixtureBackend.cpp
+# uses to skip its dlopen()/dlsym() dance entirely (see
+# refprop_static_bindings.h in the vendored CoolProp checkout). This avoids
+# needing Emscripten's -sMAIN_MODULE at link time - see heatpump-wasm's
+# build.rs, where MAIN_MODULE is otherwise required for REFPROP's dlopen()
+# and is incompatible with -sWASM_BINDGEN's module post-processing.
+static-refprop = ["dep:refprop-sys"]
 
 [build-dependencies]
 cmake = "0.1"
+
+[dependencies]
+refprop-sys = { path = "../../refprop-sys", version = "0.1.0", optional = true }

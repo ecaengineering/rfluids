@@ -13,12 +13,26 @@ fn main() {
     println!("cargo:rerun-if-changed=../vendor/CoolProp/include");
 
     let static_link = cfg!(feature = "static-link");
+    let static_refprop = cfg!(feature = "static-refprop");
+    if static_refprop && !static_link {
+        // The static REFPROP archives only get linked into the final Rust
+        // binary via rustc-link-lib below - that only reaches CoolProp's own
+        // code when CoolProp itself is whole-archive-linked into that same
+        // binary (static-link). In shared mode, libCoolProp.so is fully
+        // linked by CMake/em++ as its own standalone wasm module, which
+        // would be left with undefined REFPROP symbols.
+        panic!("static-refprop requires static-link (REFPROP can't be linked into a separately-built libCoolProp.so this way)");
+    }
     let out_dir = env::var("OUT_DIR").unwrap();
 
     let mut config = Config::new("../vendor/CoolProp");
 
     // Prevent CMakeCache contamination when toggling feature modes
-    let mode_dir = if static_link { "static" } else { "shared" };
+    let mode_dir = format!(
+        "{}-{}",
+        if static_link { "static" } else { "shared" },
+        if static_refprop { "static-refprop" } else { "dlopen-refprop" }
+    );
     config.out_dir(format!("{out_dir}/{mode_dir}"));
 
     // Common flags
@@ -30,6 +44,16 @@ fn main() {
         .cxxflag("-fwasm-exceptions")
         .cflag("-fPIC")
         .cxxflag("-fPIC");
+
+    if static_refprop {
+        // Makes REFPROPMixtureBackend.cpp call directly into the statically
+        // linked librefprop.a (via refprop_static_bindings.h) instead of
+        // dlopen()-ing librefprop.so at runtime - see this crate's
+        // static-refprop feature doc in Cargo.toml.
+        config
+            .cflag("-DCOOLPROP_REFPROP_STATIC_LINK=1")
+            .cxxflag("-DCOOLPROP_REFPROP_STATIC_LINK=1");
+    }
 
     // Mode-specific CMake definitions
     if static_link {
@@ -57,7 +81,7 @@ fn main() {
         }
 
         println!("cargo:rustc-link-search=native={}", lib_path.display());
-        println!("cargo:rustc-link-lib=static:+whole-archive=CoolProp");
+        println!("cargo:rustc-link-lib=static=CoolProp");
 
     } else {
         let shared_lib = lib_path.join("libCoolProp.so");
