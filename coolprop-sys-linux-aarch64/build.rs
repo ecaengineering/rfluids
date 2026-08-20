@@ -7,7 +7,7 @@ const LIB_PREFIX: &str = "lib";
 const LIB_NAME: &str = "CoolProp";
 const LIB_EXTENSION: &str = ".so";
 #[allow(unused)]
-const LIB_SONAME: &str = "libCoolProp.so.7";
+const LIB_SONAME: &str = "libCoolProp.so.8";
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
@@ -41,7 +41,7 @@ fn setup_lib(src_dir: &Path, target_dir: &Path) {
     fs::copy(&src_path, &target_path).expect("CoolProp library should be copied to `OUT_DIR`");
     #[cfg(unix)]
     {
-        // The library's ELF SONAME is "libCoolProp.so.7", so the runtime linker
+        // The library's ELF SONAME is "libCoolProp.so.8", so the runtime linker
         // looks for that filename rather than "libCoolProp.so". Create a symlink
         // so it can be found via the rpath set above.
         let soname_path = target_dir.join(LIB_SONAME);
