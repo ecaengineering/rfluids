@@ -7,6 +7,13 @@
 
 [`CoolProp`](https://coolprop.org) native binaries for `WebAssembly (Wasm)`
 
+By default this crate compiles CoolProp from source (`../vendor/CoolProp`)
+via `cmake`+`em++` on every build, which needs the full Emscripten SDK
+toolchain on `PATH`. Enable the `prebuilt` feature (requires `static-link`)
+to skip that and link the prebuilt `libCoolProp.a` checked in at
+`lib/static-static-refprop/` instead - see `build.rs` and the root
+project's README for the fuller explanation.
+
 #### License
 
 <sup>
