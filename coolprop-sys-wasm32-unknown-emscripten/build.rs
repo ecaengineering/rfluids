@@ -1,5 +1,6 @@
-use cmake::Config;
 use std::env;
+
+use cmake::Config;
 
 fn main() {
     let target = env::var("TARGET").unwrap_or_default();
@@ -21,7 +22,9 @@ fn main() {
         // binary (static-link). In shared mode, libCoolProp.so is fully
         // linked by CMake/em++ as its own standalone wasm module, which
         // would be left with undefined REFPROP symbols.
-        panic!("static-refprop requires static-link (REFPROP can't be linked into a separately-built libCoolProp.so this way)");
+        panic!(
+            "static-refprop requires static-link (REFPROP can't be linked into a separately-built libCoolProp.so this way)"
+        );
     }
     let out_dir = env::var("OUT_DIR").unwrap();
 
@@ -57,13 +60,9 @@ fn main() {
 
     // Mode-specific CMake definitions
     if static_link {
-        config
-            .define("COOLPROP_STATIC_LIBRARY", "ON")
-            .define("COOLPROP_SHARED_LIBRARY", "OFF");
+        config.define("COOLPROP_STATIC_LIBRARY", "ON").define("COOLPROP_SHARED_LIBRARY", "OFF");
     } else {
-        config
-            .define("COOLPROP_STATIC_LIBRARY", "OFF")
-            .define("COOLPROP_SHARED_LIBRARY", "ON");
+        config.define("COOLPROP_STATIC_LIBRARY", "OFF").define("COOLPROP_SHARED_LIBRARY", "ON");
     }
 
     // Specify target and build
@@ -74,22 +73,15 @@ fn main() {
     if static_link {
         let static_lib = lib_path.join("libCoolProp.a");
         if !static_lib.exists() {
-            panic!(
-                "libCoolProp.a not found at expected path: {}",
-                static_lib.display()
-            );
+            panic!("libCoolProp.a not found at expected path: {}", static_lib.display());
         }
 
         println!("cargo:rustc-link-search=native={}", lib_path.display());
         println!("cargo:rustc-link-lib=static=CoolProp");
-
     } else {
         let shared_lib = lib_path.join("libCoolProp.so");
         if !shared_lib.exists() {
-            panic!(
-                "libCoolProp.so not found at expected path: {}",
-                shared_lib.display()
-            );
+            panic!("libCoolProp.so not found at expected path: {}", shared_lib.display());
         }
 
         println!("cargo:wasm_artifact={}", shared_lib.display());
