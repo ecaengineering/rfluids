@@ -40,6 +40,17 @@ static-link = []
 # build.rs, where MAIN_MODULE is otherwise required for REFPROP's dlopen()
 # and is incompatible with -sWASM_BINDGEN's module post-processing.
 static-refprop = ["dep:refprop-sys"]
+# Off (default): build CoolProp from ../vendor/CoolProp via cmake+em++, as
+# static-link/static-refprop above already did - requires the full
+# Emscripten SDK toolchain on PATH (see the workspace root CLAUDE.md).
+# On: skip that build entirely and link the prebuilt libCoolProp.a checked
+# in at lib/static-static-refprop/ instead - see build.rs and README.md.
+# Meant for anyone who just wants to build heatpump-wasm without also
+# setting up cmake+emsdk; doesn't change anything about *which* CoolProp
+# gets linked, only how its binary was produced. Requires static-link (the
+# only mode a prebuilt binary is shipped for - build.rs panics with a clear
+# message if this is enabled without it).
+prebuilt = []
 
 [build-dependencies]
 cmake = "0.1"
