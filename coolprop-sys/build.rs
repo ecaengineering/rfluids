@@ -30,14 +30,11 @@ fn main() {
 
         // Only generate dynamic library dynamic pointers for non-WASM targets
         if target_arch != "wasm32" {
-            builder = builder
-                .dynamic_library_name("CoolProp")
-                .dynamic_link_require_all(true);
+            builder = builder.dynamic_library_name("CoolProp").dynamic_link_require_all(true);
         }
 
-        let bindings = builder
-            .generate()
-            .expect("bindgen should generate bindings from `CoolPropLib.h`");
+        let bindings =
+            builder.generate().expect("bindgen should generate bindings from `CoolPropLib.h`");
 
         bindings
             .write_to_file(target_dir.join("bindings.rs"))
