@@ -119,7 +119,9 @@ pub const COOLPROP_PATH: &str = coolprop_sys_macos_x86_64::COOLPROP_PATH;
 pub const COOLPROP_PATH: &str = coolprop_sys_windows_aarch64::COOLPROP_PATH;
 #[cfg(all(target_os = "windows", target_arch = "x86_64"))]
 pub const COOLPROP_PATH: &str = coolprop_sys_windows_x86_64::COOLPROP_PATH;
-#[cfg(all(target_arch = "wasm32", any(target_os = "unknown", target_os = "emscripten")))]
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
+pub const COOLPROP_PATH: &str = coolprop_sys_wasm32_unknown_unknown::COOLPROP_PATH;
+#[cfg(all(target_arch = "wasm32", target_os = "emscripten"))]
 pub const COOLPROP_PATH: &str = coolprop_sys_wasm32_unknown_emscripten::COOLPROP_PATH;
 
 /// Process-wide synchronization boundary for the loaded `CoolProp` dynamic library.
